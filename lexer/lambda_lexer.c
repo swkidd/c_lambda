@@ -11,9 +11,10 @@ char* tokenNames[] = {
     "NAME",
     "LPAREN",
     "RPAREN",
-    "GREATERTHAN"
+    "GREATERTHAN",
+    "BACKSLASH"
 };
-const int tokenNamesLen = 6;
+const int tokenNamesLen = 7;
 
 char* getTokenName(int x) {
     if (x < tokenNamesLen) {
@@ -45,6 +46,9 @@ Token_t* nextToken(Lexer_t* lexer) {
             case '>':
               consume(lexer);
               return init_token(GREATERTHAN_TYPE, ">", &getTokenName);
+            case '\\':
+              consume(lexer);
+              return init_token(BACKSLASH_TYPE, "\\", &getTokenName);
             default:
               if (isLetter(lexer->c)) {
                   return NAME(lexer);
@@ -82,7 +86,7 @@ void WS(Lexer_t* lexer) {
 }
 
 int main() {
-    Lexer_t* lexer = init_lambda_lexer(13, "(xxy) > ypple");
+    Lexer_t* lexer = init_lambda_lexer(14, "(\\xxy > ypple)");
     Token_t* tok = nextToken(lexer);
     int i = 0;
     while (tok->type != EOF_TYPE && ++i < 10) {
